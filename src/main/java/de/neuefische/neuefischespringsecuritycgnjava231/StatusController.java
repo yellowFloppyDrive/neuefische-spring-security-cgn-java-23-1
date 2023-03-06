@@ -11,4 +11,9 @@ public class StatusController {
     public String getStatus() {
         return "OK";
     }
+
+    @GetMapping("/admin")
+    public String getAdminStatus () {
+        return "Admin OK";
+    }
 }

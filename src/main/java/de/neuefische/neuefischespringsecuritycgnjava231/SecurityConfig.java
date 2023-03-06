@@ -23,6 +23,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .httpBasic().and()
                 .authorizeHttpRequests()
+                .requestMatchers(HttpMethod.GET, "/api/status/admin").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/api/users/me").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/status").permitAll()

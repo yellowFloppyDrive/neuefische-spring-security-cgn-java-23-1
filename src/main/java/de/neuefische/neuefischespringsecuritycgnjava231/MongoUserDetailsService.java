@@ -1,6 +1,7 @@
 package de.neuefische.neuefischespringsecuritycgnjava231;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,6 +20,10 @@ public class MongoUserDetailsService implements UserDetailsService {
         MongoUser mongoUser = repository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        return new User(mongoUser.username(), mongoUser.password(), List.of());
+        return new User(
+                mongoUser.username(),
+                mongoUser.password(),
+                List.of(new SimpleGrantedAuthority("ROLE_" + mongoUser.role()))
+        );
     }
 }
