@@ -30,6 +30,7 @@ public class SecurityConfig {
                         .csrfTokenRequestHandler(requestHandler))
                 .httpBasic().and()
                 .authorizeHttpRequests()
+                .requestMatchers(HttpMethod.GET, "/api/csrf").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/status/admin").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/api/users/me").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
