@@ -3,6 +3,7 @@ package de.neuefische.neuefischespringsecuritycgnjava231;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -29,7 +30,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .csrfTokenRequestHandler(requestHandler))
-                .httpBasic().and()
+                .httpBasic()
+                .authenticationEntryPoint((request, response, authException) -> response.sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase()))
+                .and()
                 .sessionManagement(config ->
                     config.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .authorizeHttpRequests()
@@ -40,8 +43,6 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/status").permitAll()
                 .requestMatchers("/api/**").authenticated()
                 .anyRequest().permitAll()
-                .and()
-                .formLogin()
                 .and().build();
     }
 }
