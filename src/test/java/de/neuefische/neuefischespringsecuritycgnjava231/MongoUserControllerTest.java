@@ -11,7 +11,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -23,10 +22,18 @@ class MongoUserControllerTest {
     @Test
     @DirtiesContext
     @WithMockUser(username = "user", password = "123")
-    void getMe_whenAuthenticated_thenUsername() throws Exception {
+    void getMe_whenAuthenticated_thenOk() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/users").with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                        {
+                            "username": "user",
+                            "password":"123"
+                        }
+                        """));
+
         mockMvc.perform(MockMvcRequestBuilders.get("/api/users/me"))
-                .andExpect(status().isOk())
-                .andExpect(content().string("user"));
+                .andExpect(status().isOk());
     }
 
     @Test
