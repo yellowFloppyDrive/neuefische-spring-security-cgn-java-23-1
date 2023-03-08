@@ -56,6 +56,12 @@ public class MongoUserController {
         return getMe1(principal);
     }
 
+    @PostMapping("/logout")
+    public void logout(/*HttpSession session*/) {
+//        session.invalidate();
+//        SecurityContextHolder.clearContext();
+    }
+
     @GetMapping("/me")
     public MongoUser getMe1(Principal principal) {
         MongoUser me = mongoUserRepository
